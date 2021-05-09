@@ -1,7 +1,7 @@
- #!/bin/bash
+#!/bin/bash
 
 # TODO:
-# add logic for user provided keywords
+#
 #
 
 regex="50005|50012|12175|ERROR|WARN|CRITICAL"
@@ -17,7 +17,7 @@ function getFilesFromDirectory() {
                 local files=( $(ls $1) )
                 for i in "${files[@]}"
                 do
-                        echo "The file is: $1$i"
+#                       echo "The file is: $1$i"
 
                         #this is to get the absolute file path
                         getInfoFromFile "$1$i"
@@ -44,7 +44,7 @@ function getInfoFromFile() {
         echo -e "\n"
 }
 
-while getopts d:f: flag
+while getopts d:f:k: flag
 do
         case "${flag}" in
                 d)
@@ -54,6 +54,9 @@ do
                 f)
                         file=${OPTARG}
                         f_flag='true'
+                ;;
+                k)
+                        regex=${OPTARG}
                 ;;
         esac
 done
@@ -67,4 +70,3 @@ elif [ $f_flag ]; then
 else
         echo "Please supply at least one flag of d or f for directory or full file path, respectively"
 fi
-
