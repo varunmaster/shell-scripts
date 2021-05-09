@@ -1,18 +1,34 @@
-#!/bin/bash
+ #!/bin/bash
 
 # TODO:
-# Get it to work with directory, single file works as expected
+# add logic for user provided keywords
 #
 
 regex="50005|50012|12175|ERROR|WARN|CRITICAL"
 d_flag=''
 f_flag=''
 
-#for i in "${keyWords[@]}";
-#do
-#       echo $i
-#done
+#check if the directory supplied is directory or not
+#then get a list of files in that directory and call
+#the function getInfoFromFile function on each file
+function getFilesFromDirectory() {
+        if [ -d "$1" ]; then
+#               echo "this is a directory"
+                local files=( $(ls $1) )
+                for i in "${files[@]}"
+                do
+                        echo "The file is: $1$i"
 
+                        #this is to get the absolute file path
+                        getInfoFromFile "$1$i"
+                done
+        else
+                echo "this is not a directory"
+        fi
+}
+
+#check the file if it contains special keywords and then echo
+#out the line number and the actual line
 function getInfoFromFile() {
         echo "searching file < $1 > for keywords"
         echo -e "\n"
@@ -25,6 +41,7 @@ function getInfoFromFile() {
                         echo -e "\t$line"
                 fi
         done < $1
+        echo -e "\n"
 }
 
 while getopts d:f: flag
@@ -42,10 +59,12 @@ do
 done
 
 if [ $d_flag ]; then
-        echo "used dir: $dir";
+#       echo "used dir: $dir";
+        getFilesFromDirectory "$dir"
 elif [ $f_flag ]; then
 #       echo "used file: $file";
         getInfoFromFile "$file"
 else
         echo "Please supply at least one flag of d or f for directory or full file path, respectively"
 fi
+
