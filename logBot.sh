@@ -18,7 +18,7 @@ function getFilesFromDirectory() {
                 for i in "${files[@]}"
                 do
 #                       echo "The file is: $1$i"
-
+                        echo "==================================================================================================================================================================="
                         #this is to get the absolute file path
                         getInfoFromFile "$1$i"
                 done
@@ -30,7 +30,7 @@ function getFilesFromDirectory() {
 #check the file if it contains special keywords and then echo
 #out the line number and the actual line
 function getInfoFromFile() {
-        echo "searching file < $1 > for keywords"
+        echo -e "now searching file: \033[0;34m $1 \033[0m"
         echo -e "\n"
         local i=0
         while IFS= read -r line
@@ -41,7 +41,7 @@ function getInfoFromFile() {
                         echo -e "\t$line"
                 fi
         done < $1
-        echo -e "\n"
+        echo -e ""
 }
 
 while getopts d:f:k: flag
