@@ -10,7 +10,7 @@ f_flag=''
 
 #check if the directory supplied is directory or not
 #then get a list of files in that directory and call
-#the function getInfoFromFile function on each file
+#the function getInfoFromFile on each file
 function getFilesFromDirectory() {
         if [ -d "$1" ]; then
 #               echo "this is a directory"
@@ -33,14 +33,24 @@ function getInfoFromFile() {
         echo -e "now searching file: \033[0;34m $1 \033[0m"
         echo -e "\n"
         local i=0
+        local totalLines=0
+
         while IFS= read -r line
         do
                 ((i++))
-                if [[ $line =~ $regex  ]]; then
+                if [[ $line =~ $regex ]]; then
                         echo "Found keyword on line number: $i"
+                        ((totalLines++))
                         echo -e "\t$line"
                 fi
         done < $1
+
+        echo -e ""
+        if [ $totalLines -gt 0 ]; then
+                echo "Total lines with keywords found: $totalLines"
+        else
+                echo -e "This file does not contain any of the keyworkds: $regex"
+        fi
         echo -e ""
 }
 
